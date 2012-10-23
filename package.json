@@ -1,0 +1,26 @@
+{
+  "name": "mustache-comb",
+  "version": "0.0.1",
+  "description": "Basic validation of HTML in mustache templates.",
+  "main": "compiled/validator.js",
+  "dependencies": {
+    "node-expat": "~2.0.0",
+    "optimist": "~0.3.5",
+    "sax": "~0.4.2",
+    "mustache": "~0.7.0"
+  },
+  "devDependencies": {
+    "coffee-script": "~1.3.3"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "",
+  "keywords": [
+    "validation",
+    "mustache",
+    "html"
+  ],
+  "author": "Steven Oxley",
+  "license": "BSD"
+}
