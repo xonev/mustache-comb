@@ -1,6 +1,6 @@
 {
   "name": "mustache-comb",
-  "version": "0.0.1",
+  "version": "0.0.1-1",
   "description": "Basic validation of HTML in mustache templates.",
   "main": "./mustache-comb.js",
   "bin": "./mustache-comb.js",
