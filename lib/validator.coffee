@@ -1,3 +1,4 @@
+#!/usr/local/bin/coffee
 {argv} = require('optimist')
 {Glob} = require('glob')
 {FileParse} = require('./file_parse')
