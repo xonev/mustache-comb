@@ -34,7 +34,8 @@
     "url": "https://github.com/xonev/mustache-comb.git"
   },
   "files": [
-    "compiled"
+    "compiled",
+    "mustache-comb.js"
   ],
   "preferGlobal": true,
   "license": "BSD"
