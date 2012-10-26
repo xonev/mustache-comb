@@ -1,6 +1,7 @@
 {EventEmitter} = require('events')
+{MustacheTransformer} = require('./mustache_transformer')
 fs = require('fs')
-expat = require('node-expat')
+sax = require('sax')
 
 class FileParse extends EventEmitter
 
@@ -9,17 +10,20 @@ class FileParse extends EventEmitter
     @errors = []
     @openElements = {}
     @parser = null
+    @transformer = new MustacheTransformer
 
   run: ->
-    @parser = @parser || expat.createParser()
+    @parser = @parser || sax.createStream(true)
     @parser.on 'error', (error) =>
-      console.error 'Parsing error', error
+      errorObj = @parseError(error.message)
+      console.log "#{@filepath}:#{errorObj.line}: Parsing error: #{errorObj.message}"
 
-    @parser.on 'startElement', (name, attrs) =>
+    @parser.on 'opentag', (tag) =>
+      name = tag.name
       @openElements[name] = 0 unless @openElements[name]?
       @openElements[name]++
 
-    @parser.on 'endElement', (name) =>
+    @parser.on 'closetag', (name) =>
       @openElements[name]--
 
     @parser.on 'end', =>
@@ -28,6 +32,17 @@ class FileParse extends EventEmitter
           elementText = if count == 1 then 'element has' else 'elements have'
           console.log "#{@filepath}: #{count} '#{element}' #{elementText} not been closed."
     fileStream = fs.createReadStream(@filepath)
-    fileStream.pipe(@parser)
+    fileStream.pipe(@transformer).pipe(@parser)
+
+  parseError: (error) ->
+    matches = error.match(/^([^\n]*)\nLine: (\d+)\n/)
+    newError =
+      message: ''
+      line: null
+    if matches
+      newError.message = matches[1]
+      newError.line = matches[2]
+    newError
+
 
 exports.FileParse = FileParse

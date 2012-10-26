@@ -1,0 +1,12 @@
+<div class='form soft_form clearfix'>
+  <form action="/places" method="post" class="new_user_profile_location" id="new_user_profile_location">
+    <input type="hidden" id="user_profile_location_location_string" name="user_profile_location[location_string]" value="{{location_string}}">
+    <label for="user_profile_location_name">{{#translate}} mustache.groupon.deals.all_deals.save_location.save_this_to_your_places {{/translate}}</label>
+    <select id="user_profile_location_name" name="user_profile_location[name]">
+      <option value="home">{{#translate}} mustache.groupon.deals.all_deals.save_location.locations.home{{/translate}}</option>
+      <option value="work">{{#translate}} mustache.groupon.deals.all_deals.save_location.locations.work{{/translate}}</option>
+      <option value="play">{{#translate}} mustache.groupon.deals.all_deals.save_location.locations.play{{/translate}}</option>
+    </select>
+    <input class="button" id="user_profile_location_submit" name="commit" type="submit" value="{{#translate}} mustache.groupon.deals.all_deals.save_location.save {{/translate}}">
+  </form>
+</div>

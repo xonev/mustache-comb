@@ -1,6 +1,10 @@
 {argv} = require('optimist')
+{Glob} = require('glob')
 {FileParse} = require('./file_parse')
 
-file = argv._[0]
-parse = new FileParse(file)
-parse.run()
+fileglobs = argv._
+for fileglob in fileglobs
+  glob = new Glob(fileglob, strict: true)
+  glob.on 'match', (match) ->
+    parse = new FileParse(match)
+    parse.run()
