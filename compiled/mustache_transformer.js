@@ -18,11 +18,7 @@
 
     MustacheTransformer.prototype.currentData = '';
 
-    MustacheTransformer.prototype.tagRegex = /{{([^}]+?)}}/g;
-
-    MustacheTransformer.prototype.incompleteEndTagRegex = /{{[^}]+?}?$/;
-
-    MustacheTransformer.prototype.openBraceRegex = /{$/;
+    MustacheTransformer.prototype.currentIndex = 0;
 
     MustacheTransformer.prototype.writable = true;
 

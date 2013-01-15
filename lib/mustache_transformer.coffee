@@ -4,9 +4,7 @@ class MustacheTransformer extends Stream
   writableStream: null
 
   currentData: ''
-  tagRegex: /{{([^}]+?)}}/g
-  incompleteEndTagRegex: /{{[^}]+?}?$/
-  openBraceRegex: /{$/
+  currentIndex: 0
   writable: true
   readable: true
 
