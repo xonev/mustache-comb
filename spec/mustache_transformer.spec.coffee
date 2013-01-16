@@ -1,6 +1,6 @@
 {MustacheTransformer} = require '../lib/mustache_transformer.coffee'
 
-xdescribe 'MustacheTransformer', ->
+describe 'MustacheTransformer', ->
   transformer = null
   data = ''
 
@@ -19,6 +19,11 @@ xdescribe 'MustacheTransformer', ->
     transformer.write('test {{tag}} here}}')
     transformer.end()
     expect(data).toEqual 'test  here}}'
+
+  it 'removes multiple mustache tags', ->
+    transformer.write('test {{tag}} and other {{tag}}')
+    transformer.end()
+    expect(data).toEqual 'test  and other '
 
   it 'removes on multiple calls', ->
     transformer.write('test {{tag}} here')

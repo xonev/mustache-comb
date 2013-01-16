@@ -10,8 +10,8 @@ describe 'MustacheState', ->
 
     it 'rejects if the passed in string is not a mustache tag or section', ->
       rejectIndex = null
-      state.on 'reject', (index) ->
-        rejectIndex = index
+      state.on 'reject', (rejectState) ->
+        rejectIndex = rejectState.index
       state.process('{test}')
       expect(rejectIndex).toBe 1
 
@@ -20,6 +20,13 @@ describe 'MustacheState', ->
       state.on 'unknown', ->
         unknownFired = true
       state.process('{')
+      expect(unknownFired).toBe true
+
+    it 'emits an unknown event if there might be a tag starting at the end of the string', ->
+      unknownFired = false
+      state.on 'unknown', ->
+        unknownFired = true
+      state.process('this {', 5)
       expect(unknownFired).toBe true
 
     it 'emits an accept event when the string is a tag', ->
@@ -64,13 +71,16 @@ describe 'MustacheState', ->
 
     it 'continues from the currentIndex with an extended string', ->
       acceptFired = false
+      acceptIndex = -1
       state.process('this is a {{test}', 10)
       expect(state.isComplete).toBe false
-      state.currentString = 'this is a {{test}} right here'
-      state.on 'accept', ->
+      state.currentString = 'this is a {{test}} right {{here}'
+      state.on 'accept', (acceptState) ->
         acceptFired = true
+        acceptIndex = acceptState.index
       state.continue()
       expect(acceptFired).toBe true
+      expect(acceptIndex).toBe 17
 
     it 'continues and rejects with an extended string', ->
       rejectFired = false
@@ -81,3 +91,13 @@ describe 'MustacheState', ->
         rejectFired = true
       state.continue()
       expect(rejectFired).toBe true
+
+    it 'continues and accepts a tag that was only started', ->
+      acceptIndex = -1
+      state.process('this {', 5)
+      expect(state.isComplete).toBe false
+      state.currentString = 'this {{test}} tag'
+      state.on 'accept', (acceptState) ->
+        acceptIndex = acceptState.index
+      state.continue()
+      expect(acceptIndex).toBe 12

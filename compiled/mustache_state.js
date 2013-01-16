@@ -23,14 +23,15 @@
     }
 
     MustacheState.prototype.process = function(string, currentIndex) {
-      var delimiterIndex, endIndex, index, parseLength, _i;
+      var delimiterIndex, endIndex, index, parseLength, remainingLength, _i;
       if (currentIndex == null) {
         currentIndex = 0;
       }
       this.currentString = string;
       this.currentIndex = currentIndex;
       this.lastState = null;
-      parseLength = this.currentString.length - this.currentIndex > this.startDelimiter.length ? this.startDelimiter.length : this.currentString.length;
+      remainingLength = this.currentString.length - this.currentIndex;
+      parseLength = remainingLength > this.startDelimiter.length ? this.startDelimiter.length : remainingLength;
       endIndex = currentIndex + parseLength;
       delimiterIndex = 0;
       for (index = _i = currentIndex; currentIndex <= endIndex ? _i < endIndex : _i > endIndex; index = currentIndex <= endIndex ? ++_i : --_i) {
@@ -41,7 +42,6 @@
         delimiterIndex += 1;
       }
       if (this.currentIndex + 1 !== currentIndex + this.startDelimiter.length) {
-        this.currentIndex = currentIndex;
         return this.unknown();
       } else {
         return this.advanceState('initial');
@@ -73,12 +73,16 @@
 
     MustacheState.prototype.reject = function() {
       this.isComplete = true;
-      return this.emit('reject', this.currentIndex);
+      return this.emit('reject', {
+        index: this.currentIndex
+      });
     };
 
     MustacheState.prototype.accept = function() {
       this.isComplete = true;
-      return this.emit('accept', this.currentIndex);
+      return this.emit('accept', {
+        index: this.currentIndex
+      });
     };
 
     MustacheState.prototype.initial = function(input) {
@@ -92,7 +96,9 @@
     };
 
     MustacheState.prototype.unknown = function() {
-      return this.emit('unknown');
+      return this.emit('unknown', {
+        index: this.currentIndex
+      });
     };
 
     MustacheState.prototype.tag = function(input) {

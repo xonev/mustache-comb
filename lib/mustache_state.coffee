@@ -12,7 +12,8 @@ class MustacheState extends EventEmitter
     @currentString = string
     @currentIndex = currentIndex
     @lastState = null
-    parseLength = if @currentString.length - @currentIndex > @startDelimiter.length then @startDelimiter.length else @currentString.length
+    remainingLength = @currentString.length - @currentIndex
+    parseLength = if remainingLength > @startDelimiter.length then @startDelimiter.length else remainingLength
     endIndex = currentIndex + parseLength
     delimiterIndex = 0
     for index in [currentIndex...endIndex]
@@ -21,7 +22,6 @@ class MustacheState extends EventEmitter
         return @reject()
       delimiterIndex += 1
     if @currentIndex + 1 != currentIndex + @startDelimiter.length
-      @currentIndex = currentIndex
       @unknown()
     else
       @advanceState('initial')
@@ -46,11 +46,11 @@ class MustacheState extends EventEmitter
 
   reject: ->
     @isComplete = true
-    @emit('reject', @currentIndex)
+    @emit('reject', index: @currentIndex)
 
   accept: ->
     @isComplete = true
-    @emit('accept', @currentIndex)
+    @emit('accept', index: @currentIndex)
 
   initial: (input) ->
     if input == '#' || input == '^'
@@ -61,7 +61,7 @@ class MustacheState extends EventEmitter
       @advanceState('tag')
 
   unknown: ->
-    @emit('unknown')
+    @emit('unknown', index: @currentIndex)
 
   tag: (input) ->
     if input != '}' && input != '{'
