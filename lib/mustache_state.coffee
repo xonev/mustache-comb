@@ -54,7 +54,8 @@ class MustacheState extends EventEmitter
 
   initial: (input) ->
     if input == '#' || input == '^'
-      @advanceState('section')
+      #@advanceState('section')
+      @advanceState('tag')
     else if input == '{' || input == '}'
       @reject()
     else

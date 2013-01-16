@@ -29,6 +29,13 @@ describe 'MustacheState', ->
       state.process('this {', 5)
       expect(unknownFired).toBe true
 
+    it 'emits an unknown event if everything but the close of a tag is present', ->
+      unknownIndex = -1
+      state.on 'unknown', (unknownState) ->
+        unknownIndex = unknownState.index
+      state.process('test {{that', 5)
+      expect(unknownIndex).toBe(11)
+
     it 'emits an accept event when the string is a tag', ->
       acceptFired = false
       state.on 'accept', ->

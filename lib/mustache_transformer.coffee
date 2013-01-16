@@ -1,14 +1,15 @@
 Stream = require('stream')
-{MustacheState} = require('./mustache_state.coffee')
+{MustacheState} = require('./mustache_state')
 
 class MustacheTransformer extends Stream
   writableStream: null
 
-  currentData: ''
-  currentIndex: 0
-  writable: true
-  readable: true
-  mustacheStateStack: []
+  constructor: () ->
+    @currentData = ''
+    @currentIndex = 0
+    @writable = true
+    @readable = true
+    @mustacheStateStack = []
 
   write: (data) ->
     @filterData("#{@currentData}#{data}")
@@ -32,7 +33,6 @@ class MustacheTransformer extends Stream
 
   filterData: (data) ->
     @currentData = data
-    console.log(@currentIndex)
     if @mustacheStateStack.length > 0
       state = @mustacheStateStack.pop()
       state.currentString = data

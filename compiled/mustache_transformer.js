@@ -6,27 +6,21 @@
 
   Stream = require('stream');
 
-  MustacheState = require('./mustache_state.coffee').MustacheState;
+  MustacheState = require('./mustache_state').MustacheState;
 
   MustacheTransformer = (function(_super) {
 
     __extends(MustacheTransformer, _super);
 
-    function MustacheTransformer() {
-      return MustacheTransformer.__super__.constructor.apply(this, arguments);
-    }
-
     MustacheTransformer.prototype.writableStream = null;
 
-    MustacheTransformer.prototype.currentData = '';
-
-    MustacheTransformer.prototype.currentIndex = 0;
-
-    MustacheTransformer.prototype.writable = true;
-
-    MustacheTransformer.prototype.readable = true;
-
-    MustacheTransformer.prototype.mustacheStateStack = [];
+    function MustacheTransformer() {
+      this.currentData = '';
+      this.currentIndex = 0;
+      this.writable = true;
+      this.readable = true;
+      this.mustacheStateStack = [];
+    }
 
     MustacheTransformer.prototype.write = function(data) {
       this.filterData("" + this.currentData + data);
@@ -59,7 +53,6 @@
       var i, mustacheState, state, _i, _ref, _ref1, _results,
         _this = this;
       this.currentData = data;
-      console.log(this.currentIndex);
       if (this.mustacheStateStack.length > 0) {
         state = this.mustacheStateStack.pop();
         state.currentString = data;

@@ -87,7 +87,7 @@
 
     MustacheState.prototype.initial = function(input) {
       if (input === '#' || input === '^') {
-        return this.advanceState('section');
+        return this.advanceState('tag');
       } else if (input === '{' || input === '}') {
         return this.reject();
       } else {
